@@ -1,0 +1,76 @@
+{% extends "main.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Zapravkom CRM</title>
+{% endblock %}
+
+{% block infoblock %}
+{% if user.is_authenticated %}
+<script type="text/javascript">
+//onready settings
+
+$(document).ready(getTokenFromAPI('vlad','lolwut'));
+//get token
+var data = {"login": "",
+            "password": "",
+            "token": "",
+            "refresh": ""}
+function getTokenFromAPI(login, password){
+  if (login!= null && password!= null)
+  {
+    $.ajax(
+    {
+      url: '../api/token/',
+      type: 'POST',
+      data: {"Content-Type": "application/json",
+             "username": login,
+             "password": password},
+      success: function(result)
+      {
+        console.log(result)
+        data.token = result.access
+        data.refresh = result.refresh
+      }
+    }
+  );
+  }
+  else
+  {
+    return null
+  }
+}
+//api functions
+function getcsrftoken(){
+  return "Bearer " + data.token
+};
+
+function ClientDelete(id){
+  var d_url = '/logistic/api/client/a/' + id + '/'
+  $.ajax({
+    url: d_url,
+    type: 'DELETE',
+    headers: {"Authorization":getcsrftoken()},
+    success: function(result) {
+        location.reload(true);
+    }
+
+});
+}
+</script>
+
+  <div class="container bg-dark">
+    <div class="jumbotron">
+  <h1 class="display-4 text-primary">Профиль {{ user.username }}<span class="badge badge-info">ver .22</span></h1>
+  <p class="lead"><small class="text-right">  Сегодня {{ date }}</small></p>
+  <hr class="my-4">
+
+</div>
+<br>
+</div>
+{% else %}
+<script type="text/javascript">
+  window.location.replace("/logistic/accounts/login/");
+</script>
+{% endif %}
+{% endblock %}

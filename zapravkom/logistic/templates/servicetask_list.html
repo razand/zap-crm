@@ -1,0 +1,178 @@
+{% extends "main.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Кибернетическая бумажка</title>
+{% endblock %}
+
+{% block infoblock %}
+{% if user.is_authenticated %}
+<script type="text/javascript">
+//onready settings
+$(document).ready(function(){ $("#id_description").val('');});
+$(document).ready(function(){ $("#id_working_time_1").val('');});
+$(document).ready(function(){ $("#id_working_time_2").val('');});
+$(document).ready(function(){ $("#id_cashsumm").val('');});
+$(document).ready(function(){ $("#id_employee").val('');});
+$(document).ready(function(){ $("#id_replace").val('');});
+$(document).ready(function(){ $("#id_client").val('');});
+$(document).ready(function(){ $("#id_comment").val('');});
+//$(document).ready(function(){ $("#form .textinput").css("height", "4em");});
+$(document).ready(getTokenFromAPI('vlad','lolwut'));
+//get token
+var data = {"login": "",
+            "password": "",
+            "token": "",
+            "refresh": ""}
+function getTokenFromAPI(login, password){
+  if (login!= null && password!= null)
+  {
+    $.ajax(
+    {
+      url: '../api/token/',
+      type: 'POST',
+      data: {"Content-Type": "application/json",
+             "username": login,
+             "password": password},
+      success: function(result)
+      {
+
+        data.token = result.access
+        data.refresh = result.refresh
+      }
+    }
+  );
+  }
+  else
+  {
+    return null;
+  }
+}
+//api functions
+function getcsrftoken(){
+  return "Bearer " + data.token
+};
+
+function ServiceTaskDelete(id){
+  var d_url = '/logistic/api/servicetask/a/' + id + '/'
+  $.ajax({
+    url: d_url,
+    type: 'DELETE',
+    headers: {"Authorization":getcsrftoken()},
+    success: function(result) {
+        console.log('success delete')
+
+    }
+
+});
+  location.reload(true);
+};
+function ServiceTaskPut(id,prop,bool){
+  var d_url = '/logistic/api/servicetask/a/' + id + '/';
+  var revers = "False"
+  if (bool == "False") {revers="True"}
+  var dict = {
+    url: d_url,
+    type: 'PATCH',
+    headers: {"Authorization":getcsrftoken()},
+    data: {
+      prop : revers
+    },
+    success: function(result) {
+      console.log(result)
+      location.reload(true);
+    }}
+  dict.data[prop]=revers
+  $.ajax(dict);
+
+};
+
+</script>
+
+<div class="container bg-dark">
+
+  <div class="container bg-dark">
+    <a class="btn btn-success" data-toggle="collapse" href="#collapseForm" role="button" aria-expanded="false">
+        Добавить работу
+      </a>
+  </div>
+<br>
+
+<div class="collapse" id="collapseForm">
+<div class="card" style="width: 100%;">
+    <div class="card-body">
+    <form id="form" class="form-group" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+  <button type="submit" class="btn btn-success" name="button" >Сохранить</button>
+    </form>
+  </div>
+</div>
+</div>
+
+
+
+<table class="table table-striped table-dark text-monospace">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col"><small>Заявка</small></th>
+      <th scope="col"><small>Модель</small></th>
+      <th scope="col"><small>Дата</small></th>
+      <th scope="col"><small>ФБ</small></th>
+      <th scope="col"><small>Рол</small></th>
+      <th scope="col"><small>Маг</small></th>
+      <th scope="col"><small>Доз</small></th>
+      <th scope="col"><small>Рак</small></th>
+      <th scope="col"><small>Чип</small></th>
+      <th scope="col"><small>Зап</small></th>
+      <th scope="col"><small>Нов</small></th>
+      <th scope="col"><small>Мус</small></th>
+      <th scope="col"><small>Готов</small></th>
+      <th scope="col"><small>Комент</small></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+
+{% for item in list %}
+    <tr>
+      <th scope="row">{{ item.id }}</th>
+      <td>{{ item.task }}</td>
+      <td>{{ item.cart }}</td>
+      <td>{{ item.date }}</td>
+      <td><button type="button" class="btn {% if item.opc %}btn-primary{% else %}btn-secondary{% endif %} btn-sm" onclick="ServiceTaskPut({{ item.id }},'opc','{{ item.opc }}')"><small>X</small></button></td>
+      <td><button type="button" class="btn {% if item.pcr %}btn-primary{% else %}btn-secondary{% endif %} btn-sm" onclick="ServiceTaskPut({{ item.id }},'pcr','{{ item.pcr }}')"><small>X</small></button></td>
+      <td><button type="button" class="btn {% if item.mag %}btn-primary{% else %}btn-secondary{% endif %} btn-sm" onclick="ServiceTaskPut({{ item.id }},'mag','{{ item.mag }}')"><small>X</small></button></td>
+      <td><button type="button" class="btn {% if item.doc %}btn-primary{% else %}btn-secondary{% endif %} btn-sm" onclick="ServiceTaskPut({{ item.id }},'doc','{{ item.doc }}')"><small>X</small></button></td>
+      <td><button type="button" class="btn {% if item.wip %}btn-primary{% else %}btn-secondary{% endif %} btn-sm" onclick="ServiceTaskPut({{ item.id }},'wip','{{ item.wip }}')"><small>X</small></button></td>
+      <td><button type="button" class="btn {% if item.chip %}btn-primary{% else %}btn-secondary{% endif %} btn-sm" onclick="ServiceTaskPut({{ item.id }},'chip','{{ item.chip }}')"><small>X</small></button></td>
+      <td><button type="button" class="btn {% if item.fill %}btn-primary{% else %}btn-secondary{% endif %} btn-sm" onclick="ServiceTaskPut({{ item.id }},'fill','{{ item.fill }}')"><small>X</small></button></td>
+      <td><button type="button" class="btn {% if item.new %}btn-primary{% else %}btn-secondary{% endif %} btn-sm" onclick="ServiceTaskPut({{ item.id }},'new','{{ item.new }}')"><small>X</small></button></td>
+      <td><button type="button" class="btn {% if item.trash %}btn-primary{% else %}btn-secondary{% endif %} btn-sm" onclick="ServiceTaskPut({{ item.id }},'trash','{{ item.trash }}')"><small>X</small></button></td>
+      <td><button type="button" class="btn {% if item.close %}btn-danger{% else %}btn-secondary{% endif %} btn-sm" onclick="ServiceTaskPut({{ item.id }},'close','{{ item.close }}')"><small>X</small></button></td>
+      <td>{{ item.comment }}</td>
+      <td><button type="button" class="btn btn-secondary btn-sm" onclick="ServiceTaskDelete({{ item.id }})">X</button></td>
+    </tr>
+{% endfor %}
+
+  </tbody>
+</table>
+<br>
+</div>
+
+{% else %}
+<script type="text/javascript">
+  window.location.replace("/logistic/accounts/login/");
+</script>
+{% endif %}
+{% endblock %}
+
+
+<button type="button" name="button" onclick="getTokenFromAPI('vlad','lolwut')">xx</button>
+//идея для реализации
+всегда есть dummy клиент которого можно изменить под сущность. и сохранить так в лист таких клиентов и сразу же создать новый пустой с полями по умолчанию
+после изменения такого клиента он станоится полноценным.
+dummy_item> pre_item (create new dummy_item) >>final editing pre_item>> item
+
+имплементировать подобное со всеми сущностями не носящими характер справочных

@@ -1,0 +1,86 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    {% block title %}
+    <title>Zapravkom CRM</title>
+    {% endblock %}
+    <link href="http://zapravkom.ru/favicon.ico" rel="icon" type="image/x-icon"/>
+    <link href="http://zapravkom.ru/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <style media="screen">
+      body {
+        background-color: #d1d1d1;
+            }
+        td {
+          font-size: small;
+        }
+        #form{
+          font-size: small;
+        }
+    </style>
+    {% if user.is_authenticated %}
+    <div class="container menu bg-dark">
+      <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+
+
+      <div class="collapse navbar-collapse navbar-dark bg-dark" id="navbarSupportedContent" style="background-color: #e8f0ff">
+        <ul class="navbar-nav mr-auto justify-content-center">
+          <li class="nav-item mr-1">
+            <a class="navbar-brand h5 text-primary" href="/logistic">Zapravkom</a>
+          </li>
+          <li class="nav-item active mr-1">
+            <a class="nav-link" href="/logistic/profile">Профиль<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active mr-1">
+            <a class="nav-link " href="/logistic/task">Заявки<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active mr-1">
+            <a class="nav-link " href="/logistic/requestitem">Заказы<span class="sr-only">(current)</span></a>
+          </li>
+
+          <li class="nav-item dropdown mr-1 ">
+            <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Курьеры
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/logistic/delivery/2">Денис</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/logistic/delivery/1">Владислав</a>
+
+
+            </div>
+          </li>
+          <li class="nav-item active mr-1">
+            <a class="nav-link " href="/logistic/client_list">Клиенты<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active mr-1">
+            <a class="nav-link " href="/logistic/servicetask">Работы<span class="sr-only">(current)</span></a>
+          </li>
+
+          </ul>
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Hi, {{ user.username }} </a>
+          <a class="nav-link" href="/logistic/accounts/logout">Выйти</a>
+
+      </div>
+    </nav>
+    </div>
+    {% else %}
+    <script type="text/javascript">
+      window.location.replace("/logistic/accounts/login/");
+    </script>
+    {% endif %}
+  </head>
+  <body>
+    {% block infoblock %}
+    <code>Error loading block!</code>
+
+    {% endblock %}
+  </body>
+</html>

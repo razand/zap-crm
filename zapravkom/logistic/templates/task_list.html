@@ -1,0 +1,168 @@
+{% extends "main.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Задачи</title>
+{% endblock %}
+
+{% block infoblock %}
+{% if user.is_authenticated %}
+<script type="text/javascript">
+//onready settings
+$(document).ready(function(){ $("#id_description").val('');});
+$(document).ready(function(){ $("#id_working_time_1").val('');});
+$(document).ready(function(){ $("#id_working_time_2").val('');});
+$(document).ready(function(){ $("#id_cashsumm").val('');});
+$(document).ready(function(){ $("#id_employee").val('');});
+$(document).ready(function(){ $("#id_replace").val('');});
+$(document).ready(function(){ $("#id_client").val('');});
+$(document).ready(function(){ $("#id_comment").val('');});
+//$(document).ready(function(){ $("#form .textinput").css("height", "4em");});
+$(document).ready(getTokenFromAPI('vlad','lolwut'));
+//get token
+var data = {"login": "",
+            "password": "",
+            "token": "",
+            "refresh": ""}
+function getTokenFromAPI(login, password){
+  if (login!= null && password!= null)
+  {
+    $.ajax(
+    {
+      url: '../api/token/',
+      type: 'POST',
+      data: {"Content-Type": "application/json",
+             "username": login,
+             "password": password},
+      success: function(result)
+      {
+
+        data.token = result.access
+        data.refresh = result.refresh
+      }
+    }
+  );
+  }
+  else
+  {
+    return null;
+  }
+}
+//api functions
+function getcsrftoken(){
+  return "Bearer " + data.token
+};
+
+function TaskDelete(id){
+  var d_url = '/logistic/api/task/a/' + id + '/'
+  $.ajax({
+    url: d_url,
+    type: 'DELETE',
+    headers: {"Authorization":getcsrftoken()},
+    success: function(result) {
+        console.log('success delete')
+        $("#"+id).remove();
+    }
+
+});
+  location.reload(true);
+};
+function TaskStatus(id){
+  var d_url = '/logistic/api/task/a/' + id + '/';
+  $.ajax({
+    url: d_url,
+    type: 'PATCH',
+    headers: {"Authorization":getcsrftoken()},
+    data: {
+      process : "Сделано"
+    },
+    success: function(result) {
+        console.log(result)
+        location.reload(true);
+    }
+
+  });
+
+};
+
+</script>
+
+<div class="container bg-dark">
+  <div class="container bg-dark">
+    <a class="btn btn-success" data-toggle="collapse" href="#collapseForm" role="button" aria-expanded="false">
+        Добавить задачу
+      </a>
+  </div>
+<br>
+
+<div class="collapse" id="collapseForm">
+<div class="card" style="width: 100%;">
+    <div class="card-body">
+    <form id="form" class="form-group" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+  <button type="submit" class="btn btn-success" name="button" >Сохранить</button>
+    </form>
+  </div>
+</div>
+</div>
+
+
+
+<table class="table table-striped table-dark">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Клиент</th>
+      <th scope="col">Адрес</th>
+      <th scope="col">Курьер</th>
+      <th scope="col">Дата</th>
+      <th scope="col">Время</th>
+      <th scope="col">Нал\Без</th>
+      <th scope="col">Сумма</th>
+      <th scope="col">Подменка</th>
+      <th scope="col">З\О</th>
+      <th scope="col">Коментарий</th>
+      <th scope="col">Статус</th>
+      <th scope="col">X</th>
+    </tr>
+  </thead>
+  <tbody>
+
+{% for item in list %}
+    <tr>
+      <th scope="row">{{ item.id }}</th>
+      <td>{{ item.client }}</td>
+      <td>{{ item.description }}</td>
+      <td>{{ item.employee }}</td>
+      <td>{{ item.date }}</td>
+      <td>{{ item.working_time_1 }} - {{ item.working_time_2 }}</td>
+      <td>{{ item.payment_method }}</td>
+      <td>{{ item.summ }}</td>
+      <td>{{ item.replace }}</td>
+      <td>{{ item.get_set }}</td>
+      <td>{{ item.comment }}</td>
+      <td><button type="button" class="btn btn-primary btn-sm" onclick="TaskStatus({{ item.id }})">{{ item.process }}</button></td>
+      <td><button type="button" class="btn btn-secondary btn-sm" onclick="TaskDelete({{ item.id }})">X</button></td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+<br>
+</div>
+
+{% else %}
+<script type="text/javascript">
+  window.location.replace("/logistic/accounts/login/");
+</script>
+{% endif %}
+{% endblock %}
+
+
+<button type="button" name="button" onclick="getTokenFromAPI('vlad','lolwut')">xx</button>
+//идея для реализации
+всегда есть dummy клиент которого можно изменить под сущность. и сохранить так в лист таких клиентов и сразу же создать новый пустой с полями по умолчанию
+после изменения такого клиента он станоится полноценным.
+dummy_item> pre_item (create new dummy_item) >>final editing pre_item>> item
+
+имплементировать подобное со всеми сущностями не носящими характер справочных

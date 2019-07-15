@@ -1,0 +1,108 @@
+{% extends "main.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Денис</title>
+{% endblock %}
+
+{% block infoblock %}
+{% if user.is_authenticated %}
+<script type="text/javascript">
+//onready settings
+$(document).ready(function(){ $("#id_name").val('');});
+$(document).ready(function(){ $("#id_phone").val('');});
+$(document).ready(function(){ $("#id_adress").val('');});
+$(document).ready(function(){ $("#id_organisation").val('NO');});
+$(document).ready(function(){ $("#id_commentary").val('');});
+$(document).ready(function(){ $("#form .textinput").css("height", "4em");});
+//get token
+var data = {"login": "",
+            "password": "",
+            "token": "",
+            "refresh": ""}
+function getTokenFromAPI(login, password){
+  if (login!= null && password!= null)
+  {
+    $.ajax(
+    {
+      url: '../api/token/',
+      type: 'POST',
+      data: {"Content-Type": "application/json",
+             "username": login,
+             "password": password},
+      success: function(result)
+      {
+        console.log(result)
+        data.token = result.access
+        data.refresh = result.refresh
+      }
+    }
+  );
+  }
+  else
+  {
+    return null
+  }
+}
+//api functions
+function getcsrftoken(){
+  return "Bearer " + data.token
+};
+
+function ClientDelete(id){
+  var d_url = '/logistic/api/client/a/' + id + '/'
+  $.ajax({
+    url: d_url,
+    type: 'DELETE',
+    headers: {"Authorization":getcsrftoken()},
+    success: function(result) {
+        console.log('success delete')
+        $("#"+id).remove();
+    }
+
+});
+}
+</script>
+
+
+<div class="container ">
+
+
+  <table class="table table-striped">
+    <thead>
+      <tr class="text-dark bg-info">
+        <th scope="col">Клиент</th>
+        <th scope="col">Время</th>
+        <th scope="col">Нал\Без</th>
+        <th scope="col">Сумма</th>
+        <th scope="col">Подменка</th>
+        <th scope="col">З\О</th>
+        <th scope="col">Адрес</th>
+        <th scope="col">Коментарий</th>
+      </tr>
+    </thead>
+    <tbody>
+
+  {% for item in list %}
+      <tr>
+        <td>{{ item.client }}</td>
+        <td>{{ item.working_time_1 }} - {{ item.working_time_2 }}</td>
+        <td>{{ item.payment_method }}</td>
+        <td>{{ item.summ }}</td>
+        <td>{{ item.replace }}</td>
+        <td>{{ item.get_set }}</td>
+        <td>{{ item.description }}</td>
+        <td>{{ item.comment }}</td>
+      </tr>
+{% endfor %}
+  </tbody>
+</table>
+<br>
+</div>
+
+{% else %}
+<script type="text/javascript">
+  window.location.replace("/logistic/accounts/login/");
+</script>
+{% endif %}
+{% endblock %}

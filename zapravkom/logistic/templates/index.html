@@ -1,0 +1,109 @@
+{% extends "main.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Zapravkom CRM</title>
+{% endblock %}
+
+{% block infoblock %}
+{% if user.is_authenticated %}
+<script type="text/javascript">
+//onready settings
+
+$(document).ready(getTokenFromAPI('vlad','lolwut'));
+//get token
+var data = {"login": "",
+            "password": "",
+            "token": "",
+            "refresh": ""}
+function getTokenFromAPI(login, password){
+  if (login!= null && password!= null)
+  {
+    $.ajax(
+    {
+      url: '../api/token/',
+      type: 'POST',
+      data: {"Content-Type": "application/json",
+             "username": login,
+             "password": password},
+      success: function(result)
+      {
+        console.log(result)
+        data.token = result.access
+        data.refresh = result.refresh
+      }
+    }
+  );
+  }
+  else
+  {
+    return null
+  }
+}
+//api functions
+function getcsrftoken(){
+  return "Bearer " + data.token
+};
+
+function ClientDelete(id){
+  var d_url = '/logistic/api/client/a/' + id + '/'
+  $.ajax({
+    url: d_url,
+    type: 'DELETE',
+    headers: {"Authorization":getcsrftoken()},
+    success: function(result) {
+        location.reload(true);
+    }
+
+});
+}
+</script>
+
+  <div class="container bg-dark">
+    <div class="jumbotron">
+  <h1 class="display-4 text-primary">Zapravkom CRM <span class="badge badge-info">ver .22</span></h1>
+  <p class="lead"><small class="text-right">  Сегодня {{ date }}</small></p>
+  <hr class="my-4">
+  <div class="alert alert-secondary">
+
+
+  <h5 class="display-5">База данных:</h5>
+  <hr class="my-4">
+      <div class="progress" style="height: 25px;">
+        <div class="progress-bar text-center text-dark bg-secondary" role="progressbar" style="width: {{ counters.today_task_count }}%;" aria-valuenow="{{ counters.today_task_count }}" aria-valuemin="0" aria-valuemax="100">Всего работ сегодня: {{ counters.today_task_count }}</div>
+      </div>
+  <ul>
+    <li>
+
+
+
+    </li>
+    <li><p>Всего заявок: {{ counters.task_count }}</p></li>
+    <li><p>Всего клиентов: {{ counters.clients_count }}</p></li>
+    <li><p>Всего работ: {{ counters.servicetask_count }}</p></li>
+    <li><p>Всего картриджей: {{ counters.cartridge_count }}</p></li>
+    <li><p>Всего принтеров: {{ counters.printer_count }}</p></li>
+  </ul>
+  </div>
+  <div class="alert alert-dark">
+    {% for item in list %}
+    <div class="alert alert-info">
+      <p> {{ item.text }} </p>
+      <small class="text-secondary">{{ item.date }}</small>
+    </div>
+    {% endfor %}
+    <form id="form" class="form-group" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+            <button type="submit" class="btn btn-success btn-sm" name="button" >Отправить</button>
+    </form>
+  </div>
+</div>
+<br>
+</div>
+{% else %}
+<script type="text/javascript">
+  window.location.replace("/logistic/accounts/login/");
+</script>
+{% endif %}
+{% endblock %}
