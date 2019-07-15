@@ -25,7 +25,7 @@ SECRET_KEY = 'lffcdqlml^hs1(xt#($pchu-bmwue!me*y3y!pzc_ya=4z4zs@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.111','127.0.0.1','192.168.0.100']
+ALLOWED_HOSTS = ['192.168.0.111','127.0.0.1','192.168.0.100','192.168.0.101']
 
 
 #sourc   Application definition
