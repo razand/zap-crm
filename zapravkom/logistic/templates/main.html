@@ -33,40 +33,47 @@
       <div class="collapse navbar-collapse navbar-dark bg-dark" id="navbarSupportedContent" style="background-color: #e8f0ff">
         <ul class="navbar-nav mr-auto justify-content-center">
           <li class="nav-item mr-1">
-            <a class="navbar-brand h5 text-primary" href="/logistic">Zapravkom</a>
+            <a class="navbar-brand h5 text-info" href="/logistic">Zapravkom</a>
           </li>
           <li class="nav-item active mr-1">
-            <a class="nav-link" href="/logistic/profile">Профиль<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item active mr-1">
-            <a class="nav-link " href="/logistic/task">Заявки<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item active mr-1">
-            <a class="nav-link " href="/logistic/requestitem">Заказы<span class="sr-only">(current)</span></a>
+            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                  <a class="btn btn-warning" href="/logistic/task">Заявки</a>
+                  <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Курьеры
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                      <a class="dropdown-item" href="/logistic/delivery/2">Денис</a>
+                      <a class="dropdown-item" href="/logistic/delivery/1">Владислав</a>
+                    </div>
+                  </div>
+                  <a class="btn btn-info" href="/logistic/servicetask">Работы</a>
+          </div>
           </li>
 
           <li class="nav-item dropdown mr-1 ">
-            <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Курьеры
+            <a class="nav-link dropdown-toggle btn-outline-info btn text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Справочник
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="/logistic/delivery/2">Денис</a>
+              <a class="dropdown-item" href="/logistic/client_list">Клиенты</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/logistic/delivery/1">Владислав</a>
+              <a class="dropdown-item" href="/logistic/delivery/1">Картриджи</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/logistic/delivery/1">Принтеры</a>
+
 
 
             </div>
           </li>
           <li class="nav-item active mr-1">
-            <a class="nav-link " href="/logistic/client_list">Клиенты<span class="sr-only">(current)</span></a>
+          <a class="btn btn-primary" href="/logistic/requestitem">Заказы</a>
           </li>
-          <li class="nav-item active mr-1">
-            <a class="nav-link " href="/logistic/servicetask">Работы<span class="sr-only">(current)</span></a>
-          </li>
-
           </ul>
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Hi, {{ user.username }} </a>
-          <a class="nav-link" href="/logistic/accounts/logout">Выйти</a>
+          <a class="nav-link btn btn-secondary btn-sm" href="/logistic/profile">Профиль</a>
+          <i class="material-icons">account_box</i>
+          <a class="nav-link account_box" href="/logistic/accounts/logout">Выйти</a>
 
       </div>
     </nav>

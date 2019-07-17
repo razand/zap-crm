@@ -5,7 +5,10 @@ from django.forms import ModelForm, Select, Textarea, TextInput, NumberInput, Ra
 class TaskForm(ModelForm):
 	class Meta:
 		model = Task
-		fields = ['description', 'working_time_1', 'working_time_2',
+		fields = ['description']
+		widgets = {'description':Textarea(attrs={'type':'hidden'})}
+'''
+fields = ['description', 'working_time_1', 'working_time_2',
 		 		  'cashsumm', 'get_set', 'employee',
 				  'replace', 'payment_method', 'comment','client']
 		widgets = {
@@ -16,24 +19,24 @@ class TaskForm(ModelForm):
 			'get_set': Select(attrs={'class':'form-control-sm'}),
 			'employee': Select(attrs={'class':'form-control-sm'}),
 			'replace': Select(attrs={'class':'form-control-sm'}),
-			'client': Select(attrs={'class':'form-control-sm'}),
+			'client': Select(attrs={'class':'form-control-sm','value':'1'}),
 			'payment_method': Select(attrs={'class':'form-control-sm'})
 		}
-
+'''
 class ServiceTaskForm(ModelForm):
 	class Meta:
 		model = ServiceTask
-		fields = ['task','cart','opc','pcr','mag','doc','wip','chip','fill','new','trash','comment']
-
+		fields = ['task','cart']
+#'detailsclient'
 class ClientForm(ModelForm):
 	class Meta:
 		model = Client
-		fields = [ 'name', 'phone', 'adress', 'organisation', 'commentary']
+		fields = [ 'name', 'phone', 'adress', 'organisation', 'commentary',]
 
 class DetailsClientForm(ModelForm):
 	class Meta:
 		model = DetailsClient
-		fields = ['inn','client','nickname','name','kpp','adress','rs','ks','bik','comment']
+		fields = ['inn','nickname','name','kpp','adress','rs','ks','bik','comment']
 
 class PrinterForm(ModelForm):
 	class Meta:

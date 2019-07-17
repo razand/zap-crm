@@ -132,7 +132,9 @@ function TaskStatus(id){
 {% for item in list %}
     <tr>
       <th scope="row">{{ item.id }}</th>
-      <td>{{ item.client }}</td>
+      <td>
+      <input class="form-control form-control-sm" type="text" placeholder=".form-control-sm" value="{{ item.client }}">        
+      </td>
       <td>{{ item.description }}</td>
       <td>{{ item.employee }}</td>
       <td>{{ item.date }}</td>
