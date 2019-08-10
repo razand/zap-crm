@@ -23,6 +23,25 @@ fields = ['description', 'working_time_1', 'working_time_2',
 			'payment_method': Select(attrs={'class':'form-control-sm'})
 		}
 '''
+
+class TaskFormBig(ModelForm):
+	class Meta:
+		model = Task
+		fields = ['description', 'working_time_1', 'working_time_2',
+		 		  'cashsumm', 'get_set', 'employee',
+				  'replace', 'payment_method', 'comment','client']
+		widgets = {
+			'description': Textarea(attrs={'class':'form-control-sm mb-2','rows':2}),
+			'working_time_1': TextInput(attrs={'class':'form-control-sm','type':'time','min':'8:00','max':'19:00','class':'worktime'}),
+			'working_time_2': TextInput(attrs={'class':'form-control-sm','type':'time','min':'8:00','max':'19:00','class':'worktime'}),
+			'cashsumm': NumberInput(attrs={'class':'form-control-sm','min':'50','step':'10'}),
+			'get_set': Select(attrs={'class':'form-control-sm'}),
+			'employee': Select(attrs={'class':'form-control-sm'}),
+			'replace': Select(attrs={'class':'form-control-sm'}),
+			'client': Select(attrs={'class':'form-control-sm','value':'1'}),
+			'payment_method': Select(attrs={'class':'form-control-sm'})
+		}
+
 class ServiceTaskForm(ModelForm):
 	class Meta:
 		model = ServiceTask
