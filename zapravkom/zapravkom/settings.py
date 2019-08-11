@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'logistic',
-    'corsheaders',
     'crispy_forms',
 ]
 
@@ -75,29 +74,6 @@ REST_FRAMEWORK = {
 }
 
 ROOT_URLCONF = 'zapravkom.urls'
-
-CORS_ORIGIN_ALLOW_ALL = True
-
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -170,3 +146,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = "/home/razor/zap-crm/zapravkom/static"

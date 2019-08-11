@@ -195,7 +195,7 @@ class RequestItem(models.Model):
 
 class Feedback(models.Model):
 	id = models.AutoField(primary_key=True)
-	text = models.CharField("Отзыв:",max_length=300 )
+	text = models.CharField(max_length=300)
 	date = models.DateField("Дата",default=timezone.now)
 	def __str__(self):
 		return '%s %s' % (self.text, self.date)

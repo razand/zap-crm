@@ -84,7 +84,21 @@ function TaskStatus(id){
   });
 
 };
+function QuickEditTask(id){
+  var d_url = '/logistic/api/task/a/';
+  $.ajax({
+    url: d_url,
+    type: 'OPTIONS',
+    headers: {"Authorization":getcsrftoken()},
+    
+    success: function(result) {
+        console.log(JSON.stringify(result))
+        
+        
+    }
 
+  });
+};
 </script>
 
 <style>
@@ -97,31 +111,24 @@ function TaskStatus(id){
 </style>
 
 <div class="container bg-dark">
-  <div class="container bg-dark">
-    <a class="btn btn-success" data-toggle="collapse" href="#collapseForm" role="button" aria-expanded="false" style="background-color:#64a626">
-        Добавить задачу
-      </a>
-  </div>
-<br>
-
-<div class="collapse" id="collapseForm">
-<div class="card" style="width: 100%;">
-    <div class="card-body">
-    <form id="form" class="form-group" method="post">
+ 
+  <form id="form" class="form-group" method="post">
+    <div style="display:none">
     {% csrf_token %}
     {{ form|crispy }}
-  <button type="submit" class="btn btn-success" name="button" >Сохранить</button>
-    </form>
-  </div>
-</div>
-</div>
+    </div>
+    
+    <button type="submit" name="button" class="btn btn-success btn-lg btn-block rounded-pill" data-toggle="collapse" href="#collapseForm" role="button" aria-expanded="false" style="background-color:#64a626"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
+        </button>
+      
+      </form>
+  
 
 
-
-<table class="table table-dark">
+<table class="table table-dark rounded-top">
   <thead>
     <tr>
-      <th scope="col">#</th>
+      <th scope="col"> </th>
       <th scope="col">Клиент</th>
       <th scope="col">Адрес</th>
       <th scope="col">Курьер</th>
@@ -133,29 +140,31 @@ function TaskStatus(id){
       <th scope="col">З\О</th>
       <th scope="col">Коментарий</th>
       <th scope="col">Статус</th>
-      <th scope="col">X</th>
+      
     </tr>
   </thead>
   <tbody>
 
 
 {% for item in list %}
-    <tr data-toggle="modal" data-id="{{ item.id }}" data-target="#TaskModal{{ item.id }}">
+    <tr data-toggle="modal" data-id="{{ item.id }}" data-target="#TaskModal{{ item.id }}" onclick="QuickEditTask({{ item.id }})">
     <div class="modal fade" id="TaskModal{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalCenterTitle">Редактирование задачи №{{ item.id }}</h5>
+                  <small class="modal-title" id="exampleModalCenterTitle"><span class="badge badge-info" style="background-color:#e2e3e5; color: #343a40;">{{ item.id }}</span>  Редактирование</small>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-              Разместить тут форму, сгенерированную из REST запроса по id.
+                    <form id="quick-edit-form-{{ item.id }}">
+                    <input type = "textinput"> </input>
+                    </form>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
+                  <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Закрыть</button>
+                  <button type="button" class="btn btn-primary btn-sm">Сохранить</button>
                 </div>
               </div>
             </div>
@@ -171,8 +180,17 @@ function TaskStatus(id){
       <td>{{ item.replace }}</td>
       <td>{{ item.get_set }}</td>
       <td>{{ item.comment }}</td>
-      <td><button type="button" class="btn btn-primary btn-sm" onclick="TaskStatus({{ item.id }})">{{ item.process }}</button></td>
-      <td><button type="button" class="btn btn-secondary btn-sm" onclick="TaskDelete({{ item.id }})">X</button></td>
+      
+      {% if item.process == "Сделано" %}
+      <td> <div class="btn-group" role="group"><button type="button" title="Выполнено" class="btn btn-success btn-sm" onclick="TaskStatus({{ item.id }})">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0zm0 0h24v24H0V0z"/><path d="M16.59 7.58L10 14.17l-3.59-3.58L5 12l5 5 8-8zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg>
+      {% else %}
+      <td><div class="btn-group" role="group"><button type="button" title="Не выполнено" class="btn btn-warning btn-sm" onclick="TaskStatus({{ item.id }})">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41 14.59 8zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+      {% endif %}
+      </button>
+      <button type="button" class="btn btn-danger btn-sm" title="Удалить" onclick="TaskDelete({{ item.id }})"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/><path fill="none" d="M0 0h24v24H0z"/></svg></button></td>
+      </div>
     </tr>
 {% endfor %}
   </tbody>

@@ -91,3 +91,6 @@ class FeedbackForm(ModelForm):
 	class Meta:
 		model = Feedback
 		fields = ['text']
+		widgets = {
+			'text': TextInput(attrs={'class':'form-control input-group-text','placeholder':'Отзыв'})
+		}

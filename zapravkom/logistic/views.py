@@ -77,7 +77,7 @@ def main(request):
     if form_feedback.is_valid():
         form_feedback.save()
         return HttpResponseRedirect("/logistic/")
-    feedback_list = Feedback.objects.all()
+    feedback_list = Feedback.objects.all().order_by('id').reverse()
     context = {'date':date,'title':title,'counters':counters,'form':form_feedback,'list':feedback_list}
     return render(request, "index.html", context)
 
@@ -180,7 +180,7 @@ def profile(request):
     context = {}
     return render(request, "profile.html", context)
 def client_list(request):
-    client_list = Client.objects.all().order_by('id')
+    client_list = Client.objects.all().order_by('id').reverse()
     form_client = ClientForm(request.POST or None)
     if form_client.is_valid():
         form_client.save()
@@ -190,7 +190,7 @@ def client_list(request):
 def detailsclient(request):
     return render(request,"search.html",context)
 def task(request):
-    task_list = Task.objects.all().order_by('id')
+    task_list = Task.objects.all().order_by('id').reverse()
     form_task = TaskForm(request.POST or None)
     if form_task.is_valid():
         form_task.save()
@@ -198,7 +198,7 @@ def task(request):
     context = {'list':task_list,'form':form_task}
     return render(request,"task_list.html",context)
 def servicetask(request):
-    servicetask_list = ServiceTask.objects.filter(close=False).order_by('id')
+    servicetask_list = ServiceTask.objects.filter(close=False).order_by('id').reverse()
     form_servicetask = ServiceTaskForm(request.POST or None)
     if form_servicetask.is_valid():
         form_servicetask.save()
@@ -210,7 +210,7 @@ def cartridge(request):
 def printer(request):
     return render(request,"search.html",context)
 def employeetask(request):
-    employeetask_list = Task.objects.all().order_by('id')
+    employeetask_list = Task.objects.all().order_by('id').reverse()
     form_employeetask = TaskForm(request.POST or None)
     if form_employeetask.is_valid():
         form_employeetask.save()
@@ -218,7 +218,7 @@ def employeetask(request):
     context = {'list':employeetask_list,'form':form_employeetask}
     return render(request,"task_list.html",context)
 def requestitem(request):
-    requestitem_list = RequestItem.objects.filter(done=False).order_by('id')
+    requestitem_list = RequestItem.objects.filter(done=False).order_by('id').reverse()
     form_requestitem = RequestItemForm(request.POST or None)
     if form_requestitem.is_valid():
         form_requestitem.save()
@@ -226,11 +226,11 @@ def requestitem(request):
     context = {'list':requestitem_list,'form':form_requestitem}
     return render(request,"order_list.html",context)
 def delivery1(request):
-    task_v = Task.objects.filter(employee=1,process='Не сделано').order_by('id')
+    task_v = Task.objects.filter(employee=1,process='Не сделано').order_by('id').reverse()
     context = {'list':task_v}
     return render(request,"vladislav_task.html",context)
 
 def delivery2(request):
-    task_d = Task.objects.filter(employee=2,process='Не сделано').order_by('id')
+    task_d = Task.objects.filter(employee=2,process='Не сделано').order_by('id').reverse()
     context = {'list':task_d}
     return render(request,"denis_task.html",context)
